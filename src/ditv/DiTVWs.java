@@ -152,6 +152,7 @@ public class DiTVWs {
             ps.setInt(1, seriesId);
 
             rs = ps.executeQuery();
+            int size = 0;
             while(rs.next()) {
                 response.add(rs.getString("episode_id"));
                 response.add(rs.getString("episode_name"));
@@ -159,6 +160,60 @@ public class DiTVWs {
                 response.add(rs.getString("episode_firstAired"));
                 response.add(rs.getInt("episode_seasonnumber"));
                 response.add(rs.getInt("episode_absolute_number"));
+                size++;
+            }
+            if (size == 0) {
+                org.w3c.dom.Document doc = API.getXml(Integer.toString(seriesId), "episodes");
+                NodeList nodeList = (NodeList)doc.getElementsByTagName("Episode");
+                SqlUtils db = new SqlUtils();
+                for (int c = 0; c < nodeList.getLength();c++) {
+                    NodeList nl = nodeList.item(c).getChildNodes();
+                    Episode episode = new Episode();
+                    episode.setSeries_id(seriesId);
+                    String val;
+                    for (int i = 0; i < nl.getLength(); i++) {
+                        Node node = nl.item(i);
+                        switch (node.getNodeName()) {
+                            case "id": 
+                                val = node.getTextContent();
+                                if (val == null || val == "") { val = "0";}
+                                episode.setId(Integer.parseInt(val));
+                                break;
+                            case "EpisodeName": 
+                                val = node.getTextContent();
+                                if (val == null || val == "") { val = "empty";}
+                                episode.setName(val);
+                                break;
+                            case "EpisodeNumber": 
+                                val = node.getTextContent();
+                                if (val == null || val == "") { val = "0";}
+                                episode.setNumber(Integer.parseInt(val));
+                                break;
+                            case "FirstAired":
+                                val = node.getTextContent();
+                                if (val == null || val == "") { val = "empty";}
+                                episode.setFirstAired(val);
+                                break;
+                            case "SeasonNumber": 
+                                val = node.getTextContent();
+                                if (val == null || val == "") { val = "0";}
+                                episode.setSeason(Integer.parseInt(val));
+                                break;
+                            case "absolute_number": 
+                                val = node.getTextContent();
+                                if (val == null || val == "") { val = "0";}
+                                episode.setAbsoluteNumber(Integer.parseInt(val));
+                                break;
+                        }
+                    }
+                    db.addEpisode(episode);
+                    response.add(Integer.toString(episode.getId()));
+                    response.add(episode.getName());
+                    response.add(Integer.toString(episode.getNumber()));
+                    response.add(episode.getFirstAired());
+                    response.add(Integer.toString(episode.getSeason()));
+                    response.add(Integer.toString(episode.getAbsoluteNumber()));
+                }
             }
         }
         catch(Exception e){

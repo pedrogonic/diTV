@@ -40,6 +40,39 @@ public class SqlUtils {
         }
     }
     
+    public void addEpisode(Episode episode) {
+        java.sql.Connection con = null;
+        PreparedStatement ps = null;
+        
+        try {
+            con = getConnection();
+            String query = "insert into episode (episode_id,episode_name,episode_number,episode_firstaired,episode_seasonnumber,episode_absolute_number,episode_series_id) "+
+                    "values (?,?,?,?,?,?,?)";
+            ps = con.prepareStatement(query);
+            ps.setInt(1, episode.getId());
+            ps.setString(2, episode.getName());
+            ps.setInt(3, episode.getNumber());
+            ps.setString(4, episode.getFirstAired());
+            ps.setInt(5, episode.getSeason());
+            ps.setFloat(6, episode.getAbsoluteNumber());
+            ps.setInt(7, episode.getSeries_id());
+            ps.executeUpdate();
+        }
+         catch(Exception e) {    }
+        finally {
+            if (con != null) {
+                try{
+                    con.close();
+                }catch(SQLException e){}
+            }
+            if (ps != null) {
+                try{
+                    ps.close();
+                }catch(SQLException e){}
+            }
+        }
+    }
+    
     private java.sql.Connection getConnection() throws Exception{
         java.sql.Connection con;
         try {

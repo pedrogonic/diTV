@@ -30,28 +30,29 @@ import org.w3c.dom.NodeList;
 public class API {
 
 public static void main(String[] args){
-    org.w3c.dom.Document doc = getXml("121361", "series");
-
-    NodeList nodeList = (NodeList)doc.getElementsByTagName("Series");
-    nodeList = nodeList.item(0).getChildNodes();
-
-    for (int i = 0; i < nodeList.getLength(); i++) {
-        Node node = nodeList.item(i);
-        switch (node.getNodeName()) {
-            case "id": System.out.println(Integer.parseInt(node.getTextContent()));
-                break;
-            case "Airs_DayOfWeek": System.out.println(node.getTextContent());
-                break;
-            case "Airs_Time": System.out.println(node.getTextContent());
-                break;
-            case "Network": System.out.println(node.getTextContent());
-                break;
-            case "Rating": System.out.println(Float.parseFloat(node.getTextContent()));
-                break;
-            case "SeriesName": System.out.println(node.getTextContent());
-                break;
-        }
-    }
+    org.w3c.dom.Document doc = getXml("79755", "episodes");
+                NodeList nodeList = (NodeList)doc.getElementsByTagName("Episode");
+                System.out.println(nodeList.getLength());
+                //nodeList = nodeList.item(0).getChildNodes();
+                for (int c = 0; c < nodeList.getLength();c++) {
+                    NodeList nl = nodeList.item(c).getChildNodes();
+                    for (int i = 0; i < nl.getLength(); i++) {
+                        Node node = nl.item(i);
+                        switch (node.getNodeName()) {
+                            case "id": System.out.println(node.getTextContent());
+                                break;
+                            case "EpisodeName": System.out.println(node.getTextContent());
+                                break;
+                            case "EpisodeNumber": System.out.println(node.getTextContent());
+                                break;
+                            case "FirstAired": System.out.println(node.getTextContent());
+                                break;
+                            case "SeasonNumber": System.out.println(node.getTextContent());
+                                break;
+                            case "absolute_number": System.out.println(node.getTextContent());
+                        }
+                    }
+                    }
                     
 }
 public static Document getXml(String seriesID, String retrieve){
