@@ -102,7 +102,7 @@ public static void getXml(String seriesID, String retrieve){
             doc = removeNodeEpisodes(doc, toRemove);
         }
 
-        printDocument(doc, System.out);
+        //printDocument(doc, System.out);
         } catch (Exception e) {
     }
 }
