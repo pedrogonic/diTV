@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serviceGroup>
-    <service name="DiTVWs" scope="application">
+    <service name="diTVWs" scope="application">
         <description>DiTVWs service</description>
         <messageReceivers>
             <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only" class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
