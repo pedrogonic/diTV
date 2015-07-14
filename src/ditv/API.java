@@ -1,3 +1,5 @@
+package ditv;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -28,9 +30,32 @@ import org.w3c.dom.NodeList;
 public class API {
 
 public static void main(String[] args){
-    getXml(args[0], "episodes");
+    org.w3c.dom.Document doc = getXml("121361", "series");
+
+    NodeList nodeList = (NodeList)doc.getElementsByTagName("Series");
+    nodeList = nodeList.item(0).getChildNodes();
+
+    for (int i = 0; i < nodeList.getLength(); i++) {
+        Node node = nodeList.item(i);
+        switch (node.getNodeName()) {
+            case "id": System.out.println(Integer.parseInt(node.getTextContent()));
+                break;
+            case "Airs_DayOfWeek": System.out.println(node.getTextContent());
+                break;
+            case "Airs_Time": System.out.println(node.getTextContent());
+                break;
+            case "Network": System.out.println(node.getTextContent());
+                break;
+            case "Rating": System.out.println(Float.parseFloat(node.getTextContent()));
+                break;
+            case "SeriesName": System.out.println(node.getTextContent());
+                break;
+        }
+    }
+                    
 }
-public static void getXml(String seriesID, String retrieve){
+public static Document getXml(String seriesID, String retrieve){
+    org.w3c.dom.Document doc = null;
     try {
         String uri = "";
         ArrayList<String> toRemove = new ArrayList<String>();
@@ -95,16 +120,17 @@ public static void getXml(String seriesID, String retrieve){
         dbf.setValidating(true);
         dbf.setIgnoringElementContentWhitespace(true);
         DocumentBuilder db = dbf.newDocumentBuilder();
-        org.w3c.dom.Document doc = db.parse(xml);
+        doc = db.parse(xml);
         if (retrieve == "series"){
             doc = removeNodeSeries(doc, toRemove);
         } else if (retrieve == "episodes"){
             doc = removeNodeEpisodes(doc, toRemove);
         }
 
-        //printDocument(doc, System.out);
+        printDocument(doc, System.out);
         } catch (Exception e) {
     }
+    return doc;
 }
 
 //remove nodes from xml
