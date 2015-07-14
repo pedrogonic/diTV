@@ -23,7 +23,7 @@ public class DiTVWs {
         
         try {
             con = getConnection();
-            ps = con.prepareStatement("select distinct * from rel_id_name where lower(series_name) like lower('%"+search+"%')");
+            ps = con.prepareStatement("select distinct * from rel_id_name where lower(series_name) like lower('%"+search+"%') order by series_name");
 
             rs = ps.executeQuery();
             while(rs.next()) {
